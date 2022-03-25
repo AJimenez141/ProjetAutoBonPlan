@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 24 mars 2022 à 12:35
+-- Généré le : ven. 25 mars 2022 à 15:02
 -- Version du serveur :  10.4.11-MariaDB
 -- Version de PHP : 7.4.6
 
@@ -51,12 +51,12 @@ INSERT INTO `utilisateur` (`idUtil`, `nomUtil`, `mdp`, `role`) VALUES
 --
 
 CREATE TABLE `vehicule` (
-  `idArr` varchar(25) COLLATE utf8_bin NOT NULL,
+  `idArr` int(11) NOT NULL,
   `marque` varchar(25) COLLATE utf8_bin NOT NULL,
   `modele` varchar(25) COLLATE utf8_bin NOT NULL,
   `carburant` varchar(25) COLLATE utf8_bin NOT NULL,
   `dateArr` date NOT NULL,
-  `fournisseur` varchar(25) COLLATE utf8_bin NOT NULL
+  `fournisseur` varchar(25) COLLATE utf8_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -84,6 +84,12 @@ ALTER TABLE `vehicule`
 --
 ALTER TABLE `utilisateur`
   MODIFY `idUtil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT pour la table `vehicule`
+--
+ALTER TABLE `vehicule`
+  MODIFY `idArr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=207;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
