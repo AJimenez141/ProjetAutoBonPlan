@@ -27,26 +27,32 @@ if (isset($_SESSION['username']) && isset($_SESSION['password']) && isset($_SESS
         <body>
 
             <div class="topnav">
-                <div id="nav-container">
 
-                    <img class="logo" src="https://communication.autobonplan.com/abp-home/img/Logo_Autobonplan.png" />
+                <img class="logo" src="https://communication.autobonplan.com/abp-home/img/Logo_Autobonplan.png" />
 
+                <div class="user-info">
                     <div class="login-container">
                         <img class="user-icon" src="http://cdn.onlinewebfonts.com/svg/img_574534.png" />
-
                         <?php echo '<p>Bienvenue, ' . $_SESSION['username'] . '!</p>' ?>
+                    </div>
+                    <div class="disconnect">
                         <a href="./fin-session.php">Se déconnecter</a>
                     </div>
-
                 </div>
+
+
             </div>
             <div id="content-wrap">
 
                 <div id="date-filter">
+
                     <p>A partir du</p>
                     <input type="text" name="from_date" id="from_date" class="form-control"/>
+
+
                     <p>Jusqu'au</p>
                     <input type="text" name="to_date" id="to_date" class="form-control"/>
+
                     <input type="button" name="filter" id="filter" value="Filtrer" class="btn btn-info"/>
                 </div>
 
@@ -63,31 +69,41 @@ if (isset($_SESSION['username']) && isset($_SESSION['password']) && isset($_SESS
                         <?php
                         $req = 'SELECT * FROM vehicule ORDER BY dateArr,marque ASC';
                         $listeElements = $connexion->query($req);
+                        $nb = $listeElements->rowCount();
 
-                        foreach ($listeElements as $data) {
+                        if ($nb > 0) {
 
-                            $originalDate = $data['dateArr'];
-                            $DateTime = DateTime::createFromFormat('Y-m-d', $originalDate);
-                            $newDate = $DateTime->format('d/m/Y');
+                            foreach ($listeElements as $data) {
+
+                                $originalDate = $data['dateArr'];
+                                $DateTime = DateTime::createFromFormat('Y-m-d', $originalDate);
+                                $newDate = $DateTime->format('d/m/Y');
+                                ?>
+                                <tr>
+                                    <td><?php echo $data['marque']; ?></td>
+                                    <td><?php echo $data['modele']; ?></td>
+                                    <td><?php echo $data['carburant']; ?></td>
+                                    <td><?php echo $newDate; ?></td>
+                                    <td><?php echo $data['fournisseur']; ?></td>
+                                </tr>
+                                <?php
+                            }
+                        } else {
                             ?>
-                            <tr>
-                                <td><?php echo $data['marque'] ?? ''; ?></td>
-                                <td><?php echo $data['modele'] ?? ''; ?></td>
-                                <td><?php echo $data['carburant'] ?? ''; ?></td>
-                                <td><?php echo $newDate ?? ''; ?></td>
-                                <td><?php echo $data['fournisseur'] ?? ''; ?></td>
-                            </tr>
-                            <?php
-                        }
+                            <tr>  
+                                <td colspan="5">Aucun arrivage prévu</td>  
+                            </tr> 
+                        <?php }
                         ?>
 
                     </table>
                 </div>
 
                 <?php
+                //Si l'utilisateur connecté a le rôle d'admin, on affiche la saisie d'import de nouveau fichier
                 if ($_SESSION['role'] == 'admin') {
                     ?>
-                    <form method="post" enctype="multipart/form-data" action="traitement-fichier.php">
+                    <form method="post" enctype="multipart/form-data" action="traitement-fichier.php" name="import">
                         <input type="file" name="file" required>
                         <p><button type="submit" name="submit">Importer</button></p>
                     </form>
